@@ -17,9 +17,9 @@ void main() async {
       primaryColor: Colors.white,
       inputDecorationTheme: const InputDecorationTheme(
         enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+        OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
         hintStyle: TextStyle(color: Colors.amber),
       ),
     ),
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
   final euroController = TextEditingController();
   final pesoargentinoController = TextEditingController();
 
-
+  late double real;
   late double dolar;
   late double euro;
   late double pesoargentino;
@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
     euroController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
         .format(dolarValue * dolar / euro);
     pesoargentinoController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(dolar / pesoargentino);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(dolarValue / pesoargentino);
   }
 
   void _euroChanged(String text) {
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
     dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
         .format(euroValue * euro / dolar);
     pesoargentinoController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(euro / pesoargentino);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(euroValue* euro / pesoargentino);
   }
   void _pesoargentinoChanged(String text) {
     if (text.isEmpty) {
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
       return;
     }
     double pesoargentinoValue = double.parse(text.replaceAll(',', '.'));
-    pesoargentinoController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '') as String;
+
     realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
         .format(pesoargentinoValue * pesoargentino);
     dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text("\$ Quanto custa \$",
-            style: TextStyle(fontSize: 30),
+          style: TextStyle(fontSize: 30),
         ),
         toolbarHeight: 150,
         backgroundColor: Colors.amber,
@@ -173,7 +173,7 @@ class _HomeState extends State<Home> {
                               "Reais", "R\$", realController, _realChanged),
 
                           //const Icon(Icons.monetization_on,
-                             // size: 220.0, color: Colors.amberAccent),
+                          // size: 220.0, color: Colors.amberAccent),
 
                           const Divider(),
                           buildTextField(
