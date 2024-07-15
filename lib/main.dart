@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+
 const request = "https://api.hgbrasil.com/finance?key=bdab7778";
 
 void main() async {
@@ -17,9 +18,9 @@ void main() async {
       primaryColor: Colors.white,
       inputDecorationTheme: const InputDecorationTheme(
         enabledBorder:
-        OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         focusedBorder:
-        OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
         hintStyle: TextStyle(color: Colors.amber),
       ),
     ),
@@ -47,19 +48,23 @@ class _HomeState extends State<Home> {
   late double euro;
   late double pesoargentino;
 
+
+
   void _realChanged(String text) {
     if (text.isEmpty) {
       _clearAll();
       return;
     }
 
+
     double real = double.parse(text.replaceAll(',', '.'));
     dolarController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(real / dolar);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '',decimalDigits: 2).format(real / dolar);
     euroController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(real / euro);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2).format(real / euro);
     pesoargentinoController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(real / pesoargentino);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
+            .format(real / pesoargentino);
   }
 
   void _dolarChanged(String text) {
@@ -68,12 +73,13 @@ class _HomeState extends State<Home> {
       return;
     }
     double dolarValue = double.parse(text.replaceAll(',', '.'));
-    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(dolarValue * dolar);
-    euroController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    euroController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(dolarValue * dolar / euro);
     pesoargentinoController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(dolarValue / pesoargentino);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
+            .format(dolarValue * dolar/ pesoargentino);
   }
 
   void _euroChanged(String text) {
@@ -82,13 +88,15 @@ class _HomeState extends State<Home> {
       return;
     }
     double euroValue = double.parse(text.replaceAll(',', '.'));
-    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(euroValue * euro);
-    dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(euroValue * euro / dolar);
     pesoargentinoController.text =
-        NumberFormat.currency(locale: 'pt_BR', symbol: '').format(euroValue* euro / pesoargentino);
+        NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
+            .format(euroValue * euro / pesoargentino);
   }
+
   void _pesoargentinoChanged(String text) {
     if (text.isEmpty) {
       _clearAll();
@@ -96,11 +104,11 @@ class _HomeState extends State<Home> {
     }
     double pesoargentinoValue = double.parse(text.replaceAll(',', '.'));
 
-    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    realController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(pesoargentinoValue * pesoargentino);
-    dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    dolarController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(pesoargentinoValue * pesoargentino / dolar);
-    euroController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '')
+    euroController.text = NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2)
         .format(pesoargentinoValue * pesoargentino / euro);
   }
 
@@ -109,17 +117,22 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text("\$ Quanto custa \$",
-          style: TextStyle(fontSize: 30),
+        title: const Text(
+          "\$ Quanto custa \$",
+          style: TextStyle(fontSize: 40,
+          color: Colors.black54,
+          ),
         ),
-        toolbarHeight: 150,
-        backgroundColor: Colors.amber,
+        toolbarHeight: 180,
+        backgroundColor: const Color(0xFF988208),
         centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.cyanAccent, Colors.lightGreen, Colors.amberAccent],
+            colors: [const Color(0xFF1D1A04),
+              const Color(0xFFEBCF30),
+              const Color(0xFF1D1A04),],
             begin: Alignment.bottomLeft,
             end: Alignment.bottomRight,
           ),
@@ -139,7 +152,7 @@ class _HomeState extends State<Home> {
                 );
               default:
                 if (snapshot.hasError) {
-                  return  Center(
+                  return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -156,7 +169,8 @@ class _HomeState extends State<Home> {
                 } else {
                   dolar = snapshot.data?["results"]["currencies"]["USD"]["buy"];
                   euro = snapshot.data?["results"]["currencies"]["EUR"]["buy"];
-                  pesoargentino = snapshot.data?["results"]["currencies"]["ARS"]["buy"];
+                  pesoargentino =
+                      snapshot.data?["results"]["currencies"]["ARS"]["buy"];
                   return SingleChildScrollView(
                     padding: EdgeInsets.all(16.0),
                     child: SingleChildScrollView(
@@ -182,8 +196,8 @@ class _HomeState extends State<Home> {
                           buildTextField(
                               "Euros", "€", euroController, _euroChanged),
                           const Divider(),
-                          buildTextField(
-                              "Peso Argentino", "ARS", pesoargentinoController, _pesoargentinoChanged),
+                          buildTextField("Peso Argentino", "ARS",
+                              pesoargentinoController, _pesoargentinoChanged),
                           const Divider(),
                         ],
                       ),
